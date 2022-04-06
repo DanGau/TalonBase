@@ -1,0 +1,15 @@
+Talon wiki: https://talon.wiki/getting_started/
+Unofficial docs: https://talon.wiki/unofficial_talon_docs/#actions
+
+REPL:
+See all ui apps: ui.apps()
+See all windows: ui.windows()
+See all actions: actions.list()
+
+Build python context using python: talon copy context pie
+
+Python library source can be found by doing:
+print(ui.__file__)
+
+Which prints: C:\Program Files\Talon\lib\site-packages\talon\ui.py4
+The readable version is the .pyi file

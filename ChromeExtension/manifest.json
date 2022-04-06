@@ -1,0 +1,32 @@
+{
+    "name": "TalonKeyboardExtension",
+    "version": "0.1",
+    "description": "Enables keyboard shortcuts for use with Talon",
+    "manifest_version": 3,
+    "background" : {
+        "service_worker": "background.js"
+    },
+    "permissions" : ["activeTab", "scripting", "tabs"],
+    "host_permissions": ["<all_urls>"],
+    "commands" : {
+        "CustomButton1": {
+            "suggested_key": "Ctrl+Shift+1",
+            "description": "Set to Ctrl+Shift+1 to match talon scripts"
+        },
+        "CustomButton2": {
+            "suggested_key": "Ctrl+Shift+2",
+            "description": "Set to Ctrl+Shift+2 to match talon scripts"
+        },
+        "CustomButton3": {
+            "suggested_key": "Ctrl+Shift+3",
+            "description": "Set to Ctrl+Shift+3 to match talon scripts"
+        },
+        "CustomButton4": {
+            "suggested_key": "Ctrl+Shift+4",
+            "description": "Set to Ctrl+Shift+4 to match talon scripts"
+        },
+        "CustomButton5": {
+            "description": "Set to Ctrl+Shift+5 to match talon scripts"
+        }
+    }
+}
