@@ -1,0 +1,8 @@
+Global hotkey for push to talk
+Initial set up script
+Finish out all the XCode hotkeys (see comment in file.)
+Move the auto generating of talon files into its own home
+Code organization- putting things into logical places    
+Convert 'brief foo' To consume CSVs they can be separated between multi repos1
+Lang C++ addition
+Better Help??
