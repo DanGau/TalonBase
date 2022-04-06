@@ -6,3 +6,6 @@ Code organization- putting things into logical places
 Convert 'brief foo' To consume CSVs they can be separated between multi repos1
 Lang C++ addition
 Better Help??
+Allow multi focus to find non-active windows (chrome tabs mostly) if active windows aren't found
+Debug multi focus spam on work machines
+Determine if web server logic is needed to power web extension
