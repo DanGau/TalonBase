@@ -1,6 +1,6 @@
 -
 settings():
-    # Adjust the scale of the imgui to my liking
+    # Adjust the scale of the imgui to your liking
     imgui.scale = 1.3
 
     # Enable if you'd like the picker gui to automatically appear when explorer has focus
