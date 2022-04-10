@@ -1,7 +1,9 @@
 Talon wiki: https://talon.wiki/getting_started/
-Unofficial docs: https://talon.wiki/unofficial_talon_docs/#actions
+Unofficial docs: https://talon.wiki/unofficial_talon_docs
+Talon API Reference: https://talonvoice.com/docs/index.html#talon
 
 REPL:
+REPL talon commands can be found in: talon_repl.talon
 See all ui apps: ui.apps()
 See all windows: ui.windows()
 See all actions: actions.list()
