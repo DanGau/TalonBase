@@ -262,7 +262,7 @@ class Actions:
 
         raise RuntimeError(f'App not running: "{name}"')
 
-    def DoesNameMatchWindow(name: str, window: ui.Window) -> bool:
+    def DoesNameMatchWindow(name: str, window: ui.Window, appsOnly: bool) -> bool:
         """Returns true if the given name matches the given window by anme or by exe (on Windows)"""
         # These are windows which should never be matched. Some applications have hidden windows
         # or windows that aren't closed but aren't useful to the user.
@@ -281,13 +281,13 @@ class Actions:
             return False
         elif name.lower() in window.app.name.lower():
             return True
-        elif name.lower() in window.title.lower():
+        elif not appsOnly and name.lower() in window.title.lower():
             return True
         elif app.platform == 'windows' and window.app.exe.split(os.path.sep)[-1] == name:
             return True
         return False
 
-    def GetAllWindowsMatchingName(name: str) -> List[ui.Window]:
+    def GetAllWindowsMatchingName(name: str, appsOnly: bool) -> List[ui.Window]:
         """Get the all available running Windows with `name`."""
 
         matchingWindows = []
@@ -296,7 +296,7 @@ class Actions:
         # Try to find windows using the name that's given. If none are found
         # we'll consult the running app list and try a fuzzier match.
         for window in allWindows:
-            if actions.user.DoesNameMatchWindow(name, window):
+            if actions.user.DoesNameMatchWindow(name, window, appsOnly):
                 matchingWindows.append(window)
 
         # If there are no matches, check the running apps list and replace
@@ -314,7 +314,7 @@ class Actions:
         # This isn't the most efficient thing in the world, but ¯\_(ツ)_/¯
         if not matchingWindows:
             for window in allWindows:
-                if actions.user.DoesNameMatchWindow(name, window):
+                if actions.user.DoesNameMatchWindow(name, window, appsOnly):
                     matchingWindows.append(window)
         
         return matchingWindows
@@ -385,13 +385,13 @@ class Actions:
         MultiMatchWindowList = []
         ShowMatchingWindowUI.hide()
 
-    def AllMatchingWindowsOpen(name: str):
+    def AllMatchingWindowsOpen(name: str, appsOnly: bool):
         """Shows the UI showing all matching windows"""
         global MultiMatchWindowList
 
         # Get all the matching windows, store it to the global so other actions
         # can operate over the same indexed list.
-        MultiMatchWindowList = actions.user.GetAllWindowsMatchingName(name)
+        MultiMatchWindowList = actions.user.GetAllWindowsMatchingName(name, appsOnly)
 
         ShowMatchingWindowUI.show()
 
@@ -407,18 +407,29 @@ class Actions:
         if ShowMatchingWindowUI.showing:
             actions.user.AllMatchingWindowsClose()
 
-    def TryMultiMatchWindow(name: Union[str, Phrase]):
+    def TryMultiMatch(name: Union[str, Phrase]):
         """Takes a user string and tries to focus the most appropriate window based on that name.
         If more than one match, the picker UI is displayed."""
         nameStr = str(name)
 
-        if len(nameStr) >= 3: # Don't try to match 2 or less characters. That's a parsing error
-            windowList = actions.user.GetAllWindowsMatchingName(nameStr)
+        # Don't try to match 2 or less characters. That's a parsing error
+        if len(nameStr) >= 3:
+            # Try to match by app name first
+            windowList = actions.user.GetAllWindowsMatchingName(nameStr, True) # Apps only
 
-            if len(windowList) == 1:
-                actions.user.switcher_focus_window(windowList[0])
-            else:
-                actions.user.AllMatchingWindowsOpen(nameStr)
+            if windowList:
+                if len(windowList) == 1:
+                    actions.user.switcher_focus_window(windowList[0])
+                else:
+                    actions.user.AllMatchingWindowsOpen(nameStr, True) # Apps only
+            else: # No matching apps found
+                # If a matching app wasn't found, try window titles
+                windowList = actions.user.GetAllWindowsMatchingName(nameStr, False) # Windows and Apps
+
+                if len(windowList) == 1:
+                    actions.user.switcher_focus_window(windowList[0])
+                else:
+                    actions.user.AllMatchingWindowsOpen(nameStr, False) # Windows and Apps
 
 # UI run method for the multi focus dialog
 @imgui.open()
