@@ -264,12 +264,20 @@ class Actions:
 
     def DoesNameMatchWindow(name: str, window: ui.Window) -> bool:
         """Returns true if the given name matches the given window by anme or by exe (on Windows)"""
-        # Never match Chrome Legacy Window. If there are more things like this, convert this to a set
+        # These are windows which should never be matched. Some applications have hidden windows
+        # or windows that aren't closed but aren't useful to the user.
+        windowTitleExclusionList = [
+            'Chrome Legacy Window', # Chrome
+            '&Reload', 'Reload &All', '&Ignore', 'Ignore A&ll'] # Visual Studio
+
         if not window.title:
             return False
         if window.hidden:
             return False
-        elif window.title == 'Chrome Legacy Window':
+        elif window.title in windowTitleExclusionList:
+            return False
+        # Special case to match a window title from Visual Studio that has the project name in it
+        elif re.search('^The project \'.*?\' has been modified outside the environment\\.$', window.title):
             return False
         elif name.lower() in window.app.name.lower():
             return True
