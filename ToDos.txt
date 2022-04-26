@@ -9,3 +9,4 @@ Better Help??
 Allow multi focus to find non-active windows (chrome tabs mostly) if active windows aren't found
 Debug multi focus spam on work machines
 Determine if web server logic is needed to power web extension
+Add an installer

@@ -8,7 +8,11 @@ running close: user.switcher_hide_running()
 launch <user.launch_applications>: user.switcher_launch(launch_applications)
 
 # Multi focus commands
+<<<<<<< HEAD
 focus <phrase>: user.TryMultiMatchWindow(phrase)
+=======
+multi focus <phrase>: user.TryMultiMatch(phrase)
+>>>>>>> e562b5ce0d1e0233248341b58b9e65ca38c26eb0
 choose <number>: user.FocusMultiMatchWindowByNumber(number)
 choose close: user.AllMatchingWindowsClose()
 
