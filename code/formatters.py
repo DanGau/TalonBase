@@ -98,6 +98,10 @@ formatters_dict = {
         NOSEP,
         first_vs_rest(lambda w: w.lower(), lambda w: "_" + w.lower()),
     ),
+    "BIG_SNAKE_CASE": (
+        NOSEP,
+        first_vs_rest(lambda w: w.upper(), lambda w: "_" + w.upper()),
+    ),
     "NO_SPACES": (NOSEP, every_word(lambda w: w)),
     "DASH_SEPARATED": words_with_joiner("-"),
     "TERMINAL_DASH_SEPARATED": (
@@ -137,6 +141,7 @@ formatters_words = {
     "slasher": formatters_dict["SLASH_SEPARATED"],
     "smash": formatters_dict["NO_SPACES"],
     "snake": formatters_dict["SNAKE_CASE"],
+    "big snake": formatters_dict["BIG_SNAKE_CASE"],
     "string": formatters_dict["SINGLE_QUOTED_STRING"],
     "title": formatters_dict["CAPITALIZE_ALL_WORDS"],
 }

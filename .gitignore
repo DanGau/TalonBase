@@ -9,4 +9,4 @@ __pycache__
 .DS_Store
 
 # Junction point shenanigans
-ChromeExtension/SyncPages
+ChromeExtension/WebPages/SyncPages

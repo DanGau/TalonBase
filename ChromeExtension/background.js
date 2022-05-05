@@ -49,7 +49,7 @@ function TryImportScript(path) {
 TryImportScript('WebPages/whereby.js');
 TryImportScript('WebPages/wordle.js');
 TryImportScript('WebPages/messenger.js');
-TryImportScript('SyncPages/azureDevOps.js');
+TryImportScript('WebPages/SyncPages/AzDoPR.js');
 TryImportScript('WebPages/bing.js')
 
 // Add a listener for the commands listed in the manifest

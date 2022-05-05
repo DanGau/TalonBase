@@ -37,6 +37,12 @@ file create: key(ctrl-n)
 file rename: key(ctrl-[ s f2)
 file reveal: key(ctrl-[ s)
 
+#open files
+open file [<user.text>]:
+    key(ctrl-,)
+    insert("f ")
+    insert(text or "")
+
 # find
 hunt: key(ctrl-f)
 hunt next: key(f3)
