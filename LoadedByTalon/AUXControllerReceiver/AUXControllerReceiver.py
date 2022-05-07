@@ -10,6 +10,7 @@ import os
 import pathlib
 import threading
 import time
+from talon import app
 
 # Flag helpers
 def IsFlagSet(mask: int, flag: int) -> bool:
@@ -108,10 +109,20 @@ def AuxListener():
     auxReceiver = CreateConnection()
     ReadConnectionLoop(auxReceiver)
 
-def StartAuxControllerReceiver():
-    # Spawned as a daemon thread so it'll exit when the main thread exits without
-    # needing to join. This is useful so we can run an infinite loop on the listener
-    # thread without needing to listen to app close events.
-    listenerThread = threading.Thread(target=AuxListener, args=(), daemon=True)
-    listenerThread.start()
+hasStartedListenerThread = False
 
+def StartAuxControllerReceiver():
+    global hasStartedListenerThread
+
+    if not hasStartedListenerThread:
+        # Only start one Daemon thread per process lifetime.
+        hasStartedListenerThread = True
+
+        # Spawned as a daemon thread so it'll exit when the main thread exits without
+        # needing to join. This is useful so we can run an infinite loop on the listener
+        # thread without needing to listen to app close events.
+        listenerThread = threading.Thread(target=AuxListener, args=(), daemon=True)
+        listenerThread.start()
+
+# Wait until Talon indicates it's ready before starting the daemon thread.
+app.register("ready", StartAuxControllerReceiver)

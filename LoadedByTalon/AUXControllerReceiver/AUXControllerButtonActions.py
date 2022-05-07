@@ -1,7 +1,13 @@
 from talon import actions
 
 # These void(void) functions are used by AUXControllerReceiver
-# and are invoked when a button is pressed or released (as appropriate)
+# and are invoked when a button is pressed or released (as appropriate).
+
+# NOTE: These functions are invoked on a worker thread which makes them _not_ thread
+# safe by default. Ideally the button actions would be marshalled to the main thread
+# but talon's message pump isn't exposed to scripts loaded from the user folder.
+# As such, we take the thread safety risk and invoke actions anyway. Where possible
+# action implementations should be written in a thread safe way.
 
 # Button 1 - Talon push to talk
 def Button1Pressed():
