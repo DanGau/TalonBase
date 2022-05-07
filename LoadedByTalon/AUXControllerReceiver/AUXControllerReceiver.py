@@ -23,9 +23,8 @@ def ClearFlag(mask: int, flag: int) -> int:
 
 # Initialization of the CPython code
 def CreateConnection() -> ctypes.CDLL:
-
     # Make sure the dll matches the bitness of Talon (probably 64-bit)
-    auxReceiverDllPath = os.path.join(pathlib.Path().absolute(), "x64", "Debug", "AUXReceiver.dll")
+    auxReceiverDllPath = os.path.join(pathlib.Path().absolute(), "SerialPortInterface.dll")
 
     # Load the DLL and define the signatures. Methods are from SerialPortInterface.cpp
     auxReceiver = ctypes.CDLL(auxReceiverDllPath)
@@ -109,7 +108,7 @@ def AuxListener():
     auxReceiver = CreateConnection()
     ReadConnectionLoop(auxReceiver)
 
-def main():
+def StartAuxControllerReceiver():
     # Spawned as a daemon thread so it'll exit when the main thread exits without
     # needing to join. This is useful so we can run an infinite loop on the listener
     # thread without needing to listen to app close events.
