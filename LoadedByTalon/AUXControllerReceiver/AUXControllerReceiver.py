@@ -4,13 +4,14 @@
 
 # This is a windows only implementation, the underlying IO needs to be investigated for macOS
 
-import AUXControllerButtonActions
+import AUXControllerButtonActions as Buttons
 import ctypes
 import logging
 import os
 import pathlib
 import threading
 import time
+
 from talon import app
 
 # Flag helpers
@@ -63,16 +64,16 @@ def ReadConnectionLoop(auxReceiver: ctypes.CDLL):
     currentState = 0
 
     buttonActions = [
-        ButtonAction(0x80, 0x1, AUXControllerButtonActions.Button1Pressed, AUXControllerButtonActions.Button1Released),
-        ButtonAction(0x80, 0x2, AUXControllerButtonActions.Button2Pressed, AUXControllerButtonActions.Button2Released),
-        ButtonAction(0x80, 0x4, AUXControllerButtonActions.Button3Pressed, AUXControllerButtonActions.Button3Released),
-        ButtonAction(0x80, 0x8, AUXControllerButtonActions.Button4Pressed, AUXControllerButtonActions.Button4Released),
-        ButtonAction(0x80, 0x10, AUXControllerButtonActions.Button5Pressed, AUXControllerButtonActions.Button5Released),
-        ButtonAction(0x80, 0x20, AUXControllerButtonActions.Button6Pressed, AUXControllerButtonActions.Button6Released),
-        ButtonAction(0x40, 0x1, AUXControllerButtonActions.Button7Pressed, AUXControllerButtonActions.Button7Released),
-        ButtonAction(0x40, 0x2, AUXControllerButtonActions.Button8Pressed, AUXControllerButtonActions.Button8Released),
-        ButtonAction(0x40, 0x4, AUXControllerButtonActions.Button9Pressed, AUXControllerButtonActions.Button9Released),
-        ButtonAction(0x40, 0x8, AUXControllerButtonActions.Button10Pressed, AUXControllerButtonActions.Button10Released)]
+        ButtonAction(0x80, 0x1, Buttons.Button1Pressed, Buttons.Button1Released),
+        ButtonAction(0x80, 0x2, Buttons.Button2Pressed, Buttons.Button2Released),
+        ButtonAction(0x80, 0x4, Buttons.Button3Pressed, Buttons.Button3Released),
+        ButtonAction(0x80, 0x8, Buttons.Button4Pressed, Buttons.Button4Released),
+        ButtonAction(0x80, 0x10, Buttons.Button5Pressed, Buttons.Button5Released),
+        ButtonAction(0x80, 0x20, Buttons.Button6Pressed, Buttons.Button6Released),
+        ButtonAction(0x40, 0x1, Buttons.Button7Pressed, Buttons.Button7Released),
+        ButtonAction(0x40, 0x2, Buttons.Button8Pressed, Buttons.Button8Released),
+        ButtonAction(0x40, 0x4, Buttons.Button9Pressed, Buttons.Button9Released),
+        ButtonAction(0x40, 0x8, Buttons.Button10Pressed, Buttons.Button10Released)]
 
     while True:
         cString = auxReceiver.ReadSerialPort()
