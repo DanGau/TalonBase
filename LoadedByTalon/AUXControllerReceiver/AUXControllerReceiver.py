@@ -4,6 +4,7 @@
 
 # This is a windows only implementation, the underlying IO needs to be investigated for macOS
 
+import AUXControllerButtonActions
 import ctypes
 import os
 import pathlib
@@ -48,19 +49,7 @@ def CreateConnection() -> ctypes.CDLL:
 
     return auxReceiver
 
-# To do - add button implementation
-def KeyPress1():
-    print("\tPressed 1")
-
-def KeyRelease1():
-    print("\tReleased 1")
-
-def KeyPress2():
-    print("\tPressed 2")
-
-def KeyRelease2():
-    print("\tReleased 2")
-
+# Helper struct used to organize button mask, flag, and actions
 class ButtonAction:
     def __init__(self, mask, flag, onPress, onRelease):
         self.mask = mask
@@ -73,16 +62,16 @@ def ReadConnectionLoop(auxReceiver: ctypes.CDLL):
     currentState = 0
 
     buttonActions = [
-        ButtonAction(0x80, 0x1, KeyPress1, KeyRelease1),
-        ButtonAction(0x80, 0x2, KeyPress2, KeyRelease2),
-        ButtonAction(0x80, 0x4, KeyPress1, KeyRelease1),
-        ButtonAction(0x80, 0x8, KeyPress2, KeyRelease2),
-        ButtonAction(0x80, 0x10, KeyPress1, KeyRelease1),
-        ButtonAction(0x80, 0x20, KeyPress2, KeyRelease2),
-        ButtonAction(0x40, 0x1, KeyPress1, KeyRelease1),
-        ButtonAction(0x40, 0x2, KeyPress2, KeyRelease2),
-        ButtonAction(0x40, 0x4, KeyPress1, KeyRelease1),
-        ButtonAction(0x40, 0x8, KeyPress2, KeyRelease2),]
+        ButtonAction(0x80, 0x1, AUXControllerButtonActions.Button1Pressed, AUXControllerButtonActions.Button1Released),
+        ButtonAction(0x80, 0x2, AUXControllerButtonActions.Button2Pressed, AUXControllerButtonActions.Button2Released),
+        ButtonAction(0x80, 0x4, AUXControllerButtonActions.Button3Pressed, AUXControllerButtonActions.Button3Released),
+        ButtonAction(0x80, 0x8, AUXControllerButtonActions.Button4Pressed, AUXControllerButtonActions.Button4Released),
+        ButtonAction(0x80, 0x10, AUXControllerButtonActions.Button5Pressed, AUXControllerButtonActions.Button5Released),
+        ButtonAction(0x80, 0x20, AUXControllerButtonActions.Button6Pressed, AUXControllerButtonActions.Button6Released),
+        ButtonAction(0x40, 0x1, AUXControllerButtonActions.Button7Pressed, AUXControllerButtonActions.Button7Released),
+        ButtonAction(0x40, 0x2, AUXControllerButtonActions.Button8Pressed, AUXControllerButtonActions.Button8Released),
+        ButtonAction(0x40, 0x4, AUXControllerButtonActions.Button9Pressed, AUXControllerButtonActions.Button9Released),
+        ButtonAction(0x40, 0x8, AUXControllerButtonActions.Button10Pressed, AUXControllerButtonActions.Button10Released)]
 
     while True:
         cString = auxReceiver.ReadSerialPort()
