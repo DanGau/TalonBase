@@ -10,3 +10,49 @@ __pycache__
 
 # Junction point shenanigans
 ChromeExtension/WebPages/SyncPages
+
+# cpp stuff
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.pdb
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+#Debug files
+*.tlog
+*.log
+*.suo
+*.db
+*.opendb
+*.ipch
+
+# Other binary files
+*.ipdb
+*.iobj
+*.exp
+*.ilk
+*.idb
+
+# Visual Studio Files
+.vs/
