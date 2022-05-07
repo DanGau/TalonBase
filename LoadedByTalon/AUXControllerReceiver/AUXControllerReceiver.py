@@ -6,6 +6,7 @@
 
 import AUXControllerButtonActions
 import ctypes
+import logging
 import os
 import pathlib
 import threading
@@ -117,6 +118,8 @@ def StartAuxControllerReceiver():
     if not hasStartedListenerThread:
         # Only start one Daemon thread per process lifetime.
         hasStartedListenerThread = True
+
+        logging.warning("The stack trace in the log window can be ignored. This thread is being created knowingly.")
 
         # Spawned as a daemon thread so it'll exit when the main thread exits without
         # needing to join. This is useful so we can run an infinite loop on the listener
