@@ -22,11 +22,12 @@ def Button1Released():
 # Button 2
 def Button2Pressed():
     logging.warning("AUX Controller Button 2 Pressed")
+    # No-op, all actions on release
     return
 
 def Button2Released():
     logging.warning("AUX Controller Button 2 Released")
-    return
+    actions.speech.toggle()
 
 # Button 3
 def Button3Pressed():
