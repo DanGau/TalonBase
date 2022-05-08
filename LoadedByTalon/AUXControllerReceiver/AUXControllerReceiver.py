@@ -4,7 +4,6 @@
 
 # This is a windows only implementation, the underlying IO needs to be investigated for macOS
 
-import AUXControllerButtonActions as Buttons
 import ctypes
 import logging
 import os
@@ -12,6 +11,7 @@ import pathlib
 import threading
 import time
 
+from .AUXControllerButtonActions import *
 from talon import app
 
 # Flag helpers
@@ -27,7 +27,7 @@ def ClearFlag(mask: int, flag: int) -> int:
 # Initialization of the CPython code
 def CreateConnection() -> ctypes.CDLL:
     # Make sure the dll matches the bitness of Talon (probably 64-bit)
-    auxReceiverDllPath = os.path.join(pathlib.Path().absolute(), "SerialPortInterface.dll")
+    auxReceiverDllPath = os.path.join(pathlib.Path(__file__).parent.resolve(), "SerialPortInterface.dll")
 
     # Load the DLL and define the signatures. Methods are from SerialPortInterface.cpp
     auxReceiver = ctypes.CDLL(auxReceiverDllPath)
@@ -64,16 +64,16 @@ def ReadConnectionLoop(auxReceiver: ctypes.CDLL):
     currentState = 0
 
     buttonActions = [
-        ButtonAction(0x80, 0x1, Buttons.Button1Pressed, Buttons.Button1Released),
-        ButtonAction(0x80, 0x2, Buttons.Button2Pressed, Buttons.Button2Released),
-        ButtonAction(0x80, 0x4, Buttons.Button3Pressed, Buttons.Button3Released),
-        ButtonAction(0x80, 0x8, Buttons.Button4Pressed, Buttons.Button4Released),
-        ButtonAction(0x80, 0x10, Buttons.Button5Pressed, Buttons.Button5Released),
-        ButtonAction(0x80, 0x20, Buttons.Button6Pressed, Buttons.Button6Released),
-        ButtonAction(0x40, 0x1, Buttons.Button7Pressed, Buttons.Button7Released),
-        ButtonAction(0x40, 0x2, Buttons.Button8Pressed, Buttons.Button8Released),
-        ButtonAction(0x40, 0x4, Buttons.Button9Pressed, Buttons.Button9Released),
-        ButtonAction(0x40, 0x8, Buttons.Button10Pressed, Buttons.Button10Released)]
+        ButtonAction(0x80, 0x1, Button1Pressed, Button1Released),
+        ButtonAction(0x80, 0x2, Button2Pressed, Button2Released),
+        ButtonAction(0x80, 0x4, Button3Pressed, Button3Released),
+        ButtonAction(0x80, 0x8, Button4Pressed, Button4Released),
+        ButtonAction(0x80, 0x10, Button5Pressed, Button5Released),
+        ButtonAction(0x80, 0x20, Button6Pressed, Button6Released),
+        ButtonAction(0x40, 0x100, Button7Pressed, Button7Released),
+        ButtonAction(0x40, 0x200, Button8Pressed, Button8Released),
+        ButtonAction(0x40, 0x400, Button9Pressed, Button9Released),
+        ButtonAction(0x40, 0x800, Button10Pressed, Button10Released)]
 
     while True:
         cString = auxReceiver.ReadSerialPort()
@@ -87,6 +87,11 @@ def ReadConnectionLoop(auxReceiver: ctypes.CDLL):
                 # The mask is used as we want to transfer more button state than is available
                 # if a since byte.
                 if IsFlagSet(byte, buttonAction.mask):
+                    # currentState tracks the state across all masks, so some masks need to be
+                    # bit shifted to an open part of the mask.
+                    if IsFlagSet(byte, 0x40): # Byte 2
+                        byte = byte << 8
+
                     flag = buttonAction.flag
                     # Key was active, now released
                     if IsFlagSet(currentState, flag) and not IsFlagSet(byte, flag):
@@ -120,13 +125,13 @@ def StartAuxControllerReceiver():
         # Only start one Daemon thread per process lifetime.
         hasStartedListenerThread = True
 
-        logging.warning("The stack trace in the log window can be ignored. This thread is being created knowingly.")
-
         # Spawned as a daemon thread so it'll exit when the main thread exits without
         # needing to join. This is useful so we can run an infinite loop on the listener
         # thread without needing to listen to app close events.
         listenerThread = threading.Thread(target=AuxListener, args=(), daemon=True)
         listenerThread.start()
+
+        logging.warning("The stack trace in the log window above can be ignored. This thread is being created knowingly.")
 
 # Wait until Talon indicates it's ready before starting the daemon thread.
 app.register("ready", StartAuxControllerReceiver)
